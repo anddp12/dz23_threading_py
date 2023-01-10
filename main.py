@@ -18,41 +18,47 @@ print("""
 4. Журнал # все записи из файла
       """)
 
-choice = input('Select a menu item: ')
-if choice == "1":
-    pass
-elif choice == "2":
-    pass
-elif choice == "2.1":
-    pass
-elif choice == "2.2":
-    pass
-elif choice == "2.3":
-    pass
-elif choice == "3":
-    pass
-elif choice == "3.1":
-    pass
-elif choice == "3.2":
-    pass
-elif choice == "3.3":
-    pass
+def menu():
+    choice = input('Select a menu item: ')
+    if choice == "1.1":
+        temp = req()['temperature']
+        print(f"🌡 Текущая температура {temp} ℃")
+    elif choice == "2.1":
+        electricity = req()['meter']['electricity']
+        print(f"Счетсик електроенергии {electricity}")
+    elif choice == "2.2":
+        gas = req()['meter']['gas']
+        print(f"Счетчик газа {gas}")
+    elif choice == "2.3":
+        water = req()['meter']['gas']
+        print(f"Счетчик водьі {water}")
+    elif choice == "3.1":
+        boiler = req()['boiler']
+        print(f"Состояние бойлера {boiler}")
+    elif choice == "3.2":
+        pass
+    elif choice == "3.3":
+        pass
+    elif choice == "4":
+        pass
 
 
-def task2():
+def req():
     response = requests.get("http://localhost:8000/cgi-bin/rest.py")
-    print(response.text)
-
-#     # json_w = json.loads(response.text)
-#     # temp = json_w['temperature']
-#     # print(f"🌡 Текущая температура {temp} ℃")
+    # print(response.text)
+    json_w = json.loads(response.text)
+    return json_w
 
 
-th2 = threading.Thread(target=task2)
+th1 = threading.Thread(target=menu)
+th2 = threading.Thread(target=req)
 
-timer = threading.Timer(5, task2)
+th1.start()
+# th2.start()
+
+timer = threading.Timer(5, req)
 timer.start()
 
-th2.start()
-th2.join()
+th1.join()
+# th2.join()
 
