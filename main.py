@@ -18,45 +18,58 @@ print("""
     2.2 Газ # показания счетчика, текущий расход
     2.3 Вода # показания счетчика, текущий расход
 3. Котел
-   3.1 Состояние # Включен/Выключен, температура, давление
-   3.2 Включить # Команда на включение
-   3.3 Выключить # Команда на выключение
+    3.1 Состояние # Включен/Выключен, температура, давление
+    3.2 Включить # Команда на включение
+    3.3 Выключить # Команда на выключение
 4. Журнал # все записи из файла
       """)
 
 def menu():
-    choice = input('Select a menu item: ')
-    if choice == "1.1":
-        lock_json_w.acquire()
-        temp = json_w['temperature']
-        lock_json_w.release()
-        print(f"🌡 Текущая температура {temp} ℃")
-    elif choice == "2.1":
-        lock_json_w.acquire()
-        electricity = json_w['meter']['electricity']
-        lock_json_w.release()
-        print(f"Счетсик електроенергии {electricity}")
-    elif choice == "2.2":
-        lock_json_w.acquire()
-        gas = json_w['meter']['gas']
-        lock_json_w.release()
-        print(f"Счетчик газа {gas}")
-    elif choice == "2.3":
-        water = json_w['meter']['gas']
-        print(f"Счетчик водьі {water}")
-    elif choice == "3.1":
-        lock_json_w.acquire()
-        boiler = json_w['boiler']
-        lock_json_w.release()
-        print(f"Состояние бойлера {boiler}")
-    elif choice == "3.2":
-        pass
-    elif choice == "3.3":
-        pass
-    elif choice == "4":
-        pass
-    exit_event.set()
-    sys.exit()
+    while(True):
+        choice = input('Select a menu item and enter <e> to exit: ')
+        if choice == "1.1":
+            lock_json_w.acquire()
+            temp = json_w['temperature']
+            hum = json_w['humidity']
+            lock_json_w.release()
+            print(f"🌡 Текущая температура {temp} ℃ \n💧 Влажность воздуха {hum} %")
+        elif choice == "2.1":
+            lock_json_w.acquire()
+            electricity = json_w['meter']['electricity']
+            lock_json_w.release()
+            print(f"⚡ Счетчик електроенергии {electricity}")
+        elif choice == "2.2":
+            lock_json_w.acquire()
+            gas = json_w['meter']['gas']
+            lock_json_w.release()
+            print(f"Счетчик газа {gas}")
+        elif choice == "2.3":
+            water = json_w['meter']['gas']
+            print(f"💦 Счетчик водьі {water}")
+        elif choice == "3.1":
+            lock_json_w.acquire()
+            boiler = json_w['boiler']
+            lock_json_w.release()
+            print(f" 📈 Состояние бойлера {boiler}")
+        elif choice == "3.2":
+            if json_w['boiler']['isRun'] == False:
+                on_boiler = json_w['boiler']['isRun'] = True
+                print(f'Бойлер включен {on_boiler}')
+            else:
+                print('Бойлер включен')
+        elif choice == "3.3":
+            if json_w['boiler']['isRun'] == True:
+                off_boiler = json_w['boiler']['isRun'] = False
+                print(f'Бойлер вьіключен {off_boiler}')
+            else:
+                print('Бойлер вьіключен')
+        elif choice == "4":
+            with open('result.txt', 'r') as file:
+                print(file.readlines())
+        elif choice == "e":
+            break
+        exit_event.set()
+        # sys.exit()
 
 
 def req():
