@@ -29,41 +29,41 @@ def menu():
         choice = input('Select a menu item and enter <e> to exit: ')
         if choice == "1.1":
             lock_json_w.acquire()
+            temp = json_w['temperature']
+            hum = json_w['humidity']
             with open('result.txt', 'a', encoding='utf-8') as file:
-                temp = json_w['temperature']
-                hum = json_w['humidity']
                 time_temp = time.asctime()
                 file.write(time_temp), file.write(f" Текущая температура {temp} ℃. Влажность воздуха {hum} % \n")
             lock_json_w.release()
             print(f"🌡 Текущая температура {temp} ℃ \n💧 Влажность воздуха {hum} %")
         elif choice == "2.1":
             lock_json_w.acquire()
+            electricity = json_w['meter']['electricity']
             with open('result.txt', 'a', encoding='utf-8') as file:
-                electricity = json_w['meter']['electricity']
                 time_temp = time.asctime()
                 file.write(time_temp), file.write(f" Счетчик електроенергии {electricity} \n")
             lock_json_w.release()
             print(f"⚡ Счетчик електроенергии {electricity}")
         elif choice == "2.2":
             lock_json_w.acquire()
+            gas = json_w['meter']['gas']
             with open('result.txt', 'a', encoding='utf-8') as file:
-                gas = json_w['meter']['gas']
                 time_temp = time.asctime()
                 file.write(time_temp), file.write(f" Счетчик газа {gas} \n")
             lock_json_w.release()
             print(f"Счетчик газа {gas}")
         elif choice == "2.3":
             lock_json_w.acquire()
+            water = json_w['meter']['water']
             with open('result.txt', 'a', encoding='utf-8') as file:
-                water = json_w['meter']['gas']
                 time_temp = time.asctime()
                 file.write(time_temp), file.write(f" Счетчик водьі {water} \n")
             lock_json_w.release()
             print(f"💦 Счетчик водьі {water}")
         elif choice == "3.1":
             lock_json_w.acquire()
+            boiler = json_w['boiler']
             with open('result.txt', 'a', encoding='utf-8') as file:
-                boiler = json_w['boiler']
                 time_temp = time.asctime()
                 file.write(time_temp), file.write(f" Состояние бойлера {boiler} \n")
             lock_json_w.release()
@@ -71,8 +71,8 @@ def menu():
         elif choice == "3.2":
             lock_json_w.acquire()
             if json_w['boiler']['isRun'] == False:
+                on_boiler = json_w['boiler']['isRun'] = True
                 with open('result.txt', 'a', encoding='utf-8') as file:
-                    on_boiler = json_w['boiler']['isRun'] = True
                     time_temp = time.asctime()
                     file.write(time_temp), file.write(f" Бойлер включен {on_boiler} \n")
                 print(f'Бойлер включен {on_boiler}')
@@ -85,8 +85,8 @@ def menu():
         elif choice == "3.3":
             lock_json_w.acquire()
             if json_w['boiler']['isRun'] == True:
+                off_boiler = json_w['boiler']['isRun'] = False
                 with open('result.txt', 'a', encoding='utf-8') as file:
-                    off_boiler = json_w['boiler']['isRun'] = False
                     time_temp = time.asctime()
                     file.write(time_temp), file.write(f" Бойлер вьіключен {off_boiler} \n")
                 print(f'Бойлер вьіключен {off_boiler}')
